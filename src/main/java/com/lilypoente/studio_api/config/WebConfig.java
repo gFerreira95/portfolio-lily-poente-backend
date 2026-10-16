@@ -18,8 +18,7 @@ import com.lilypoente.studio_api.repository.UserRepository;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${cors.allowed.origins}")
-    private String[] allowedOrigins;
+   
 
     @Value("${admin.default.username}")
     private String adminUsername;
@@ -27,12 +26,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${admin.default.password}")
     private String adminPassword;
 
-    @Override
+   @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins(allowedOrigins)
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*") // <-- Libera qualquer frontend (Cloudflare, Vercel, Localhost)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 
     @Bean
