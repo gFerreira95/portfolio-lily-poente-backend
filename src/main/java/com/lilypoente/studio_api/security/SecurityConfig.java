@@ -31,10 +31,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // Rotas Públicas (Visitantes do site e Tela de Login)
+                        // Libera o preflight do CORS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        
+                        // Rotas Públicas
                         .requestMatchers(HttpMethod.GET, "/api/portfolio/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        // Qualquer outra rota (POST, PUT, DELETE) exige estar logado como Admin
+                        
+                        // Rotas Protegidas
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
