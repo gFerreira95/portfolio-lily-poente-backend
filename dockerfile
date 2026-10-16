@@ -1,12 +1,12 @@
-# Etapa 1: Build da aplicação com Maven (Troque 21 por 17 se seu pom.xml usar Java 17)
+# Etapa 1: Build com Maven e Java 17 (Multi-arch: suporta x86 e ARM64 da Oracle)
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Imagem enxuta apenas para execução
-FROM eclipse-temurin:21-jre-alpine
+# Etapa 2: Imagem de execução leve
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
